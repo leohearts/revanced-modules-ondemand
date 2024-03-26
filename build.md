@@ -1,12 +1,12 @@
-Twitch: 16.9.1  
-Twitter: 10.33.0-release.0  
 Music: 6.44.54  
+Twitter: 10.33.0-release.0  
 YouTube: 19.04.37  
-Reddit: 2024.12.0  
-TikTok: 32.5.3  
 Lightroom: 9.2.2  
 Spotify: 8.9.24.633  
+TikTok: 32.5.3  
 Music-Extended: 6.44.54  
+Twitch: 16.9.1  
+Reddit: 2024.12.0  
 YouTube-Extended: 19.04.37  
 
 Install [Vanced Microg](https://github.com/TeamVanced/VancedMicroG/releases) for non-root YouTube and YT Music  
