@@ -535,12 +535,14 @@ uninstall_sh() {
 customize_sh() {
 	local s="${CUSTOMIZE_SH//__PKGNAME/$1}"
 	s="${s//__EXTRCT/$4}"
+	local bdate=$(date +%d%m%y)
 	# shellcheck disable=SC2001
 	if [ "$3" = "arm64-v8a" ]; then
 		s=$(sed 's/#arm$/abort "ERROR: Wrong arch\nYour device: arm\nModule: arm64"/g' <<<"$s")
 	elif [ "$3" = "arm-v7a" ]; then
 		s=$(sed 's/#arm64$/abort "ERROR: Wrong arch\nYour device: arm64\nModule: arm"/g' <<<"$s")
 	fi
+	s="${s//__BUILDDATE/$bdate}"
 	echo "${s//__PKGVER/$2}" >"${5}/customize.sh"
 }
 service_sh() {

@@ -68,6 +68,7 @@ install() {
 		abort "ERROR: Stock __PKGNAME apk was not found"
 	fi
 	ui_print "* Updating __PKGNAME to __PKGVER"
+	ui_print "* Build __BUILDDATE"
 	settings put global verifier_verify_adb_installs 0
 	SZ=$(stat -c "%s" $MODPATH/__PKGNAME.apk)
 	if ! SES=$(pm install-create --user 0 -i com.android.vending -r -d -S "$SZ" 2>&1); then
