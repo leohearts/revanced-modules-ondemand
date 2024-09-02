@@ -1,7 +1,7 @@
 Music: 7.03.52  
 Twitter: 10.56.0-release.0  
-YouTube: 19.16.39  
 Twitch: 16.9.1  
+YouTube: 19.16.39  
 Reddit: 2024.17.0  
 Music-Extended: 7.13.52  
 TikTok: 32.5.3  
@@ -21,7 +21,3 @@ CLI: j-hc/revanced-cli-4.6.0-all.jar
 Integrations: ReVanced/revanced-integrations-1.13.0.apk  
 Patches: ReVanced/revanced-patches-4.13.3.jar  
 [Changelog](https://github.com/ReVanced/revanced-patches/releases/tag/v4.13.3)  
-
-Skipped:  
-Patches: ReVanced/revanced-patches-4.13.3.jar  
-Patches: inotia00/revanced-patches-4.12.3.jar    
