@@ -1,48 +1,37 @@
-enable-module-update = true # set this to false if you do not want to receive updates for the module in magisk app
+enable-module-update = true
 parallel-jobs = 1
 
-# add 'enabled = false' for not patching a specific app or remove it from the config
-# see CONFIG.md for more detailed explanations
-
-# patches-source can be any GitHub repo with morphe patches (.mpp releases)
-# community patches index: https://github.com/nvbangg/awesome-morphe
-# Piko (Twitter/Instagram): https://github.com/crimera/piko
-# Twitch: https://github.com/Canic/twitch-morphe-patch
+# patches-source defaults to MorpheApp/morphe-patches
+# Community patches index: https://github.com/nvbangg/awesome-morphe
 
 [YouTube]
 build-mode = "both"
-excluded-patches = ""
-included-patches = ""
-version = "auto"
+version = "21.07.247"
+archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.youtube"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/google-inc/youtube"
 uptodown-dlurl = "https://youtube.en.uptodown.com/android"
-# archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.youtube"
 
 [Music]
 build-mode = "both"
 arch = "both"
+version = "9.15.51"
+archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.apps.youtube.music"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/google-inc/youtube-music"
 uptodown-dlurl = "https://youtube-music.en.uptodown.com/android"
-# archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.google.android.apps.youtube.music
 
 [Twitch]
+enabled = false
 patches-source = "Canic/twitch-morphe-patch"
-# rv-brand = "Morphe-Twitch"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/twitch-interactive-inc/twitch/"
-uptodown-dlurl = "https://twitch.en.uptodown.com/android"
-# archive-dlurl = "https://archive.org/download/jhc-apks/apks/tv.twitch.android.app"
 
 [Twitter]
+enabled = false
 patches-source = "crimera/piko"
-# rv-brand = "Piko"
 build-mode = "apk"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/x-corp/twitter"
-dpi = "120-640dpi"
-# archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.twitter.android"
 
 [TikTok]
 enabled = false
-# archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.zhiliaoapp.musically"
 
 [Messenger]
 enabled = false
