@@ -1,6 +1,6 @@
 # Config
 
-Adding another revanced app is as easy as this:
+Adding another app is as easy as this:
 ```toml
 [Some-App]
 apkmirror-dlurl = "https://www.apkmirror.com/apk/inc/app"
@@ -15,15 +15,14 @@ There exists an example below with all defaults shown and all the keys explicitl
 ```toml
 parallel-jobs = 1                    # amount of cores to use for parallel patching, if not set $(nproc) is used
 compression-level = 9                # module zip compression level
-remove-rv-integrations-checks = true # remove checks from the revanced integrations
 
-patches-source = "revanced/revanced-patches" # where to fetch patches bundle from. default: "revanced/revanced-patches"
-cli-source = "j-hc/revanced-cli"             # where to fetch cli from. default: "j-hc/revanced-cli"
+patches-source = "MorpheApp/morphe-patches" # where to fetch patches bundle (.mpp) from. default: "MorpheApp/morphe-patches"
+cli-source = "MorpheApp/morphe-cli"         # where to fetch cli (morphe-desktop jar) from. default: "MorpheApp/morphe-cli"
 # options like cli-source can also set per app
-rv-brand = "ReVanced Extended" # rebrand from 'ReVanced' to something different. default: "ReVanced"
+rv-brand = "Morphe" # rebrand from 'Morphe' to something different. default: "Morphe"
 
-patches-version = "v2.160.0" # 'latest', 'dev', or a version number. default: "latest"
-cli-version = "v5.0.0"       # 'latest', 'dev', or a version number. default: "latest"
+patches-version = "v1.41.0" # 'latest', 'dev', or a version number. default: "latest"
+cli-version = "v1.15.0"     # 'latest', 'dev', or a version number. default: "latest"
 
 [Some-App]
 app-name = "SomeApp" # if set, release name becomes SomeApp instead of Some-App. default is same as table name, which is 'Some-App' here.
@@ -51,9 +50,24 @@ include-stock = true                                       # includes stock apk 
 exclusive-patches = false                                  # exclude all patches by default. default: false
 apkmirror-dlurl = "https://www.apkmirror.com/apk/inc/app"
 uptodown-dlurl = "https://spotify.en.uptodown.com/android"
-module-prop-name = "some-app-magisk"                       # magisk module prop name.
-apkmirror-dpi = "360-480dpi"                               # used to select apk variant from apkmirror. default: nodpi
+direct-dlurl = "https://github.com/user/repo/releases/download/v1/app.apk" # direct download URL, takes priority
+archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.example.app"
+module-prop-name = "some-app-morphe"                       # magisk module prop name.
+dpi = "360-480dpi"                                         # used to select apk variant from apkmirror. default: nodpi
 arch = "arm64-v8a"                                         # 'arm64-v8a', 'arm-v7a', 'all', 'both'. 'both' downloads both arm64-v8a and arm-v7a. default: all
-riplib = true                                              # enables ripping x86 and x86_64 libs from apks with j-hc revanced cli. default: true
-
 ```
+
+## Using community patches
+
+Set `patches-source` per app to any GitHub repo that publishes Morphe patches (.mpp files in releases):
+
+```toml
+[YouTube-Custom]
+app-name = "YouTube"
+patches-source = "username/morphe-patches-repo"
+rv-brand = "CustomBrand"
+build-mode = "both"
+apkmirror-dlurl = "https://www.apkmirror.com/apk/google-inc/youtube"
+```
+
+Browse available community patches at [awesome-morphe](https://github.com/nvbangg/awesome-morphe).
