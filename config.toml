@@ -22,11 +22,18 @@ uptodown-dlurl = "https://youtube-music.en.uptodown.com/android"
 [Twitch]
 enabled = false
 patches-source = "Canic/twitch-morphe-patch"
+# Disabled: Canic/twitch-morphe-patch requires Twitch 30.5.0,
+# which is not available on any working APK source.
+# Provide via direct-dlurl to build.
 apkmirror-dlurl = "https://www.apkmirror.com/apk/twitch-interactive-inc/twitch/"
 
 [Twitter]
 enabled = false
 patches-source = "crimera/piko"
+# Disabled: Piko requires Twitter 12.19.1-release.0, which
+# is not available on any working APK source. 12.22.0 on
+# archive.org is incompatible (all patches fail).
+# Provide via direct-dlurl to build.
 build-mode = "apk"
 apkmirror-dlurl = "https://www.apkmirror.com/apk/x-corp/twitter"
 
