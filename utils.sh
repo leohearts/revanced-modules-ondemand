@@ -379,8 +379,8 @@ dl_apkmirror() {
 		if [ -z "$dlurl" ]; then return 1; fi
 		resp=$(req "$dlurl" -)
 	fi
-	url=$(echo "$resp" | $HTMLQ --base https://www.apkmirror.com --attribute href "a.btn") || return 1
-	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href "span > a[rel = nofollow]") || return 1
+	url=$(echo "$resp" | $HTMLQ --base https://www.apkmirror.com --attribute href '.downloadButton') || return 1
+	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href 'a[rel="nofollow"]' | grep 'download?key=') || return 1
 
 	if [ "$is_bundle" = true ]; then
 		req "$url" "${output}.apkm" || return 1
@@ -738,18 +738,7 @@ build_rv() {
 		cp -f "$patched_apk" "${base_template}/base.apk"
 
 		if [ "${args[include_stock]}" = true ]; then
-			mkdir -p "${base_template}/stock/"
-			if [ -f "${stock_apk}.apkm" ]; then
-				if [ "$arch" = "arm64-v8a" ]; then
-					unzip -j "${stock_apk}.apkm" '*.apk' -x '*x86_64.apk' -x '*x86.apk' -x '*armeabi_v7a.apk' -d "${base_template}/stock/" >/dev/null 2>&1
-				elif [ "$arch" = "arm-v7a" ]; then
-					unzip -j "${stock_apk}.apkm" '*.apk' -x '*x86_64.apk' -x '*x86.apk' -x '*arm64_v8a.apk' -d "${base_template}/stock/" >/dev/null 2>&1
-				else
-					unzip -j "${stock_apk}.apkm" '*.apk' -x '*x86_64.apk' -x '*x86.apk' -d "${base_template}/stock/" >/dev/null 2>&1
-				fi
-			else
-				cp -f "$stock_apk" "${base_template}/stock/base.apk"
-			fi
+			cp -f "$stock_apk" "${base_template}/${pkg_name}.apk"
 		fi
 
 		pushd >/dev/null "$base_template" || abort "Module template dir not found"
