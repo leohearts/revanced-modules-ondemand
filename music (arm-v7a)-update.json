@@ -1,6 +1,6 @@
 {
-  "version": "9.15.51 (patches 1.41.0)",
-  "versionCode": 99,
-  "zipUrl": "https://github.com/leohearts/revanced-modules-ondemand/releases/download/99/music-morphe-v9.15.51-arm-v7a.zip",
+  "version": "9.15.51 (patches 1.42.0)",
+  "versionCode": 100,
+  "zipUrl": "https://github.com/leohearts/revanced-modules-ondemand/releases/download/100/music-morphe-v9.15.51-arm-v7a.zip",
   "changelog": "https://raw.githubusercontent.com/leohearts/revanced-modules-ondemand/update/build.md"
 }
