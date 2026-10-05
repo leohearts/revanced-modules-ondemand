@@ -6,12 +6,9 @@ Use [zygisk-detach](https://github.com/j-hc/zygisk-detach/releases/latest) to de
 
 [morphe-modules-ondemand](https://github.com/leohearts/revanced-modules-ondemand)
   
-CLI: MorpheApp/morphe-desktop-1.18.0-all.jar  
-Patches: MorpheApp/patches-1.44.0.mpp  
-[Changelog](https://github.com/MorpheApp/morphe-patches/releases/tag/v1.44.0)
+CLI: MorpheApp/morphe-desktop-1.18.1-all.jar  
+Patches: MorpheApp/patches-1.45.0.mpp  
+[Changelog](https://github.com/MorpheApp/morphe-patches/releases/tag/v1.45.0)
 
-CLI: MorpheApp/morphe-desktop-1.18.0-all.jar  
+CLI: MorpheApp/morphe-desktop-1.18.1-all.jar  
 [Changelog](https://github.com/MorpheApp/morphe-patches/releases/tag/v)  
-
-Skipped:  
-Patches: MorpheApp/patches-1.44.0.mpp    
