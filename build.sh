@@ -112,41 +112,32 @@ for table_name in $(toml_get_table_names); do
 	done
 	if [ -z "${app_args[dl_from]-}" ]; then abort "ERROR: no 'dlurl' option was set for '$table_name'. (${DL_SRCS[*]})"; fi
 	app_args[arch]=$(toml_get "$t" arch) || app_args[arch]="all"
-	if ! isoneof "${app_args[arch]}" "both" "all" "arm64-v8a" "arm-v7a" "x86_64" "x86"; then
-		abort "wrong arch '${app_args[arch]}' for '$table_name'"
-	fi
+	if [ "${app_args[arch]}" = both ]; then app_args[arch]="arm64-v8a arm-v7a"; fi
+	read -ra arches <<<"${app_args[arch]}"
+	for arch in "${arches[@]}"; do
+		if ! isoneof "$arch" "all" "arm64-v8a" "arm-v7a" "x86_64" "x86"; then
+			abort "wrong arch '${arch}' for '$table_name'"
+		fi
+	done
 
 	app_args[pkg_name]=$(toml_get "$t" pkg-name) || app_args[pkg_name]=""
 	app_args[dpi]=$(toml_get "$t" dpi) || app_args[dpi]=""
 	table_name_f=${table_name,,}
 	table_name_f=${table_name_f// /-}
-	app_args[module_prop_name]=$(toml_get "$t" module-prop-name) || app_args[module_prop_name]="${table_name_f}-morphe"
+	module_prop_name_b=$(toml_get "$t" module-prop-name) || module_prop_name_b="${table_name_f}-morphe"
 
-	if [ "${app_args[arch]}" = both ]; then
-		app_args[table]="$table_name (arm64-v8a)"
-		app_args[arch]="arm64-v8a"
-		module_prop_name_b=${app_args[module_prop_name]}
-		app_args[module_prop_name]="${module_prop_name_b}-arm64"
-		idx=$((idx + 1))
-		build_rv "$(declare -p app_args)" &
-		app_args[table]="$table_name (arm-v7a)"
-		app_args[arch]="arm-v7a"
-		app_args[module_prop_name]="${module_prop_name_b}-arm"
+	for arch in "${arches[@]}"; do
+		app_args[arch]=$arch
+		if ((${#arches[@]} > 1)); then app_args[table]="$table_name ($arch)"; fi
+		ma=$(module_arch "$arch")
+		app_args[module_prop_name]="${module_prop_name_b}${ma:+-$ma}"
 		if ((idx >= PARALLEL_JOBS)); then
 			wait -n
 			idx=$((idx - 1))
 		fi
 		idx=$((idx + 1))
 		build_rv "$(declare -p app_args)" &
-	else
-		if [ "${app_args[arch]}" = "arm64-v8a" ]; then
-			app_args[module_prop_name]="${app_args[module_prop_name]}-arm64"
-		elif [ "${app_args[arch]}" = "arm-v7a" ]; then
-			app_args[module_prop_name]="${app_args[module_prop_name]}-arm"
-		fi
-		idx=$((idx + 1))
-		build_rv "$(declare -p app_args)" &
-	fi
+	done
 done
 wait
 rm -rf temp/tmp.*

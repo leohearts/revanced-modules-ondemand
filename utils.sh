@@ -380,7 +380,7 @@ dl_apkmirror() {
 		resp=$(req "$dlurl" -)
 	fi
 	url=$(echo "$resp" | $HTMLQ --base https://www.apkmirror.com --attribute href '.downloadButton') || return 1
-	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href 'a[rel="nofollow"]' | grep 'download?key=') || return 1
+	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href 'a[rel="nofollow"]' | grep -m1 'key=') || return 1
 
 	if [ "$is_bundle" = true ]; then
 		req "$url" "${output}.apkm" || return 1
@@ -501,7 +501,7 @@ get_archive_resp() {
 	if [ -z "$r" ]; then return 1; else __ARCHIVE_RESP__=$(sed -n 's;^<a href="\(.*\)"[^"]*;\1;p' <<<"$r"); fi
 	__ARCHIVE_PKG_NAME__=$(awk -F/ '{print $NF}' <<<"$1")
 }
-get_archive_vers() { sed 's/^[^-]*-//;s/-\(all\|arm64-v8a\|arm-v7a\)\.apk//g' <<<"$__ARCHIVE_RESP__"; }
+get_archive_vers() { sed 's/^[^-]*-//;s/-\(all\|arm64-v8a\|arm-v7a\|x86_64\|x86\)\.apk//g' <<<"$__ARCHIVE_RESP__"; }
 get_archive_pkg_name() { echo "$__ARCHIVE_PKG_NAME__"; }
 
 # -------------------- direct --------------------
@@ -751,13 +751,17 @@ build_rv() {
 list_args() { tr -d '\t\r' <<<"$1" | tr -s ' ' | sed 's/" "/"\n"/g' | sed 's/\([^"]\)"\([^"]\)/\1'\''\2/g' | grep -v '^$' || :; }
 join_args() { list_args "$1" | sed "s/^/${2} /" | paste -sd " " - || :; }
 
+module_arch() {
+	case "$1" in
+	arm64-v8a) echo arm64 ;;
+	arm-v7a) echo arm ;;
+	x86_64) echo x64 ;;
+	x86) echo x86 ;;
+	esac
+}
 module_config() {
-	local ma=""
-	if [ "$4" = "arm64-v8a" ]; then
-		ma="arm64"
-	elif [ "$4" = "arm-v7a" ]; then
-		ma="arm"
-	fi
+	local ma
+	ma=$(module_arch "$4")
 	echo "PKG_NAME=$2
 PKG_VER=$3
 MODULE_ARCH=$ma" >"$1/config"
