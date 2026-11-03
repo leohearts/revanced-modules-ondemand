@@ -17,6 +17,12 @@ jobs:
           echo "direct: $(curl -s -A "$UA" -o /dev/null -w '%{http_code}' $U)"
           curl -s --socks5-hostname 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -E '^(ip|loc|warp)='
           echo "warp:   $(curl -s --socks5-hostname 127.0.0.1:40000 -A "$UA" -o /dev/null -w '%{http_code}' $U)"
+          curl --version | head -1
+          for f in -4 -6; do
+            echo "== warp $f: $(curl -s $f --socks5 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -E '^(ip|loc)=' | tr '\n' ' ')"
+            curl -s $f --socks5 127.0.0.1:40000 -A "$UA" -D - -o body.html $U | grep -iE '^(HTTP|server|cf-ray|cf-mitigated|content-type)'
+            head -c 600 body.html | tr -s ' \n' ' '; echo
+          done
       - name: full x86_64 download via build helpers
         env:
           ALL_PROXY: socks5h://127.0.0.1:40000
