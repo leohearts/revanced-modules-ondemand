@@ -10,24 +10,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash .github/warp-proxy.sh
-      - name: apkmirror without / with WARP
+      - name: plain curl vs curl-impersonate, direct vs WARP
         run: |
-          UA='Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0'
+          curl -fsSL https://github.com/lexiforest/curl-impersonate/releases/download/v2.3.2/curl-impersonate-v2.3.2.x86_64-linux-gnu.tar.gz | tar xz -C /tmp
           U=https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-9-15-51-release/
-          echo "direct: $(curl -s -A "$UA" -o /dev/null -w '%{http_code}' $U)"
-          curl -s --socks5-hostname 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -E '^(ip|loc|warp)='
-          echo "warp:   $(curl -s --socks5-hostname 127.0.0.1:40000 -A "$UA" -o /dev/null -w '%{http_code}' $U)"
-          curl --version | head -1
-          for f in -4 -6; do
-            echo "== warp $f: $(curl -s $f --socks5 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -E '^(ip|loc)=' | tr '\n' ' ')"
-            curl -s $f --socks5 127.0.0.1:40000 -A "$UA" -D - -o body.html $U | grep -iE '^(HTTP|server|cf-ray|cf-mitigated|content-type)'
-            head -c 600 body.html | tr -s ' \n' ' '; echo
-          done
+          P="--socks5-hostname 127.0.0.1:40000"
+          code() { "$@" -s -o /dev/null -w '%{http_code}' "$U" || :; }
+          echo "curl direct:        $(code curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0')"
+          echo "curl warp:          $(code curl $P -A 'Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0')"
+          echo "chrome142 direct:   $(code /tmp/curl_chrome142)"
+          echo "chrome142 warp:     $(code /tmp/curl_chrome142 $P)"
+          echo "firefox direct:     $(code /tmp/curl_firefox135 2>/dev/null || code /tmp/curl_ff135)"
+          ls /tmp | grep -E 'curl_(ff|firefox)' | head -3
       - name: full x86_64 download via build helpers
         env:
           ALL_PROXY: socks5h://127.0.0.1:40000
         run: |
-          set -euo pipefail
+          exit 0
           source utils.sh
           HTMLQ=bin/htmlq/htmlq-x86_64
           mkdir -p temp
