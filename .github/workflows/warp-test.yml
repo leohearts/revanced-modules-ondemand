@@ -9,24 +9,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: bash .github/warp-proxy.sh
-      - name: plain curl vs curl-impersonate, direct vs WARP
+      - name: full x86_64 download via build helpers with curl-impersonate
         run: |
+          set -euo pipefail
           curl -fsSL https://github.com/lexiforest/curl-impersonate/releases/download/v2.3.2/curl-impersonate-v2.3.2.x86_64-linux-gnu.tar.gz | tar xz -C /tmp
-          U=https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-9-15-51-release/
-          P="--socks5-hostname 127.0.0.1:40000"
-          code() { "$@" -s -o /dev/null -w '%{http_code}' "$U" || :; }
-          echo "curl direct:        $(code curl -A 'Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0')"
-          echo "curl warp:          $(code curl $P -A 'Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0')"
-          echo "chrome142 direct:   $(code /tmp/curl_chrome142)"
-          echo "chrome142 warp:     $(code /tmp/curl_chrome142 $P)"
-          echo "firefox direct:     $(code /tmp/curl_firefox135 2>/dev/null || code /tmp/curl_ff135)"
-          ls /tmp | grep -E 'curl_(ff|firefox)' | head -3
-      - name: full x86_64 download via build helpers
-        env:
-          ALL_PROXY: socks5h://127.0.0.1:40000
-        run: |
-          exit 0
+          export CURL=/tmp/curl_firefox144
           source utils.sh
           HTMLQ=bin/htmlq/htmlq-x86_64
           mkdir -p temp
