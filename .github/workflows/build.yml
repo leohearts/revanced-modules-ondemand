@@ -25,6 +25,13 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      # apkmirror's Cloudflare challenges the runner's stock curl/OpenSSL TLS fingerprint (403).
+      - name: Install curl-impersonate
+        run: |
+          mkdir -p "$RUNNER_TEMP/curl-impersonate"
+          curl -fsSL https://github.com/lexiforest/curl-impersonate/releases/download/v2.3.2/curl-impersonate-v2.3.2.x86_64-linux-gnu.tar.gz | tar xz -C "$RUNNER_TEMP/curl-impersonate"
+          echo "CURL=$RUNNER_TEMP/curl-impersonate/curl_firefox144" >> "$GITHUB_ENV"
+
       - name: Update config
         if: ${{ inputs.from_ci }}
         run: |
