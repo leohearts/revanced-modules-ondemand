@@ -9,18 +9,20 @@ curl -fsSLo wgcf https://github.com/ViRb3/wgcf/releases/download/v2.3.1/wgcf_2.3
 curl -fsSL https://github.com/windtf/wireproxy/releases/download/v1.1.3/wireproxy_linux_amd64.tar.gz | tar xz wireproxy
 chmod +x wgcf wireproxy
 
-./wgcf register --accept-tos >/dev/null
-./wgcf generate >/dev/null
+echo "registering WARP account"
+timeout 60 ./wgcf register --accept-tos >/dev/null
+timeout 60 ./wgcf generate >/dev/null
 printf '\n[Socks5]\nBindAddress = 127.0.0.1:40000\n' >>wgcf-profile.conf
 
-nohup ./wireproxy -s -c wgcf-profile.conf >wireproxy.log 2>&1 &
-for _ in $(seq 30); do
-	if curl -fs --socks5-hostname 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -qx 'warp=on'; then
+echo "starting wireproxy"
+nohup ./wireproxy -c wgcf-profile.conf >wireproxy.log 2>&1 &
+for _ in $(seq 20); do
+	if curl -fs -m 5 --socks5-hostname 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -qx 'warp=on'; then
 		echo "WARP proxy ready"
 		exit 0
 	fi
 	sleep 1
 done
 echo "WARP proxy failed to start" >&2
-cat wireproxy.log >&2
+grep -vE 'worker .* started' wireproxy.log | tail -30 >&2
 exit 1
