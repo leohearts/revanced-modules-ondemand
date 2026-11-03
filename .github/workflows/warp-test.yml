@@ -1,0 +1,30 @@
+name: WARP test
+on:
+  push:
+    branches: [warp-test]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash .github/warp-proxy.sh
+      - name: apkmirror without / with WARP
+        run: |
+          UA='Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0'
+          U=https://www.apkmirror.com/apk/google-inc/youtube-music/youtube-music-9-15-51-release/
+          echo "direct: $(curl -s -A "$UA" -o /dev/null -w '%{http_code}' $U)"
+          curl -s --socks5-hostname 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace | grep -E '^(ip|loc|warp)='
+          echo "warp:   $(curl -s --socks5-hostname 127.0.0.1:40000 -A "$UA" -o /dev/null -w '%{http_code}' $U)"
+      - name: full x86_64 download via build helpers
+        env:
+          ALL_PROXY: socks5h://127.0.0.1:40000
+        run: |
+          set -euo pipefail
+          source utils.sh
+          HTMLQ=bin/htmlq/htmlq-x86_64
+          mkdir -p temp
+          get_apkmirror_resp https://www.apkmirror.com/apk/google-inc/youtube-music
+          dl_apkmirror https://www.apkmirror.com/apk/google-inc/youtube-music 9.15.51 x64.apk x86_64 ""
+          ls -la x64.apk
+          unzip -l x64.apk | grep -oE 'lib/[^/]+/' | sort -u
