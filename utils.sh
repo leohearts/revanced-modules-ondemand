@@ -380,7 +380,7 @@ dl_apkmirror() {
 		resp=$(req "$dlurl" -)
 	fi
 	url=$(echo "$resp" | $HTMLQ --base https://www.apkmirror.com --attribute href '.downloadButton') || return 1
-	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href 'a[rel="nofollow"]' | grep -m1 'key=') || return 1
+	url=$(req "$url" - | $HTMLQ --base https://www.apkmirror.com --attribute href 'a[rel="nofollow"][href*="key="]') || return 1
 
 	if [ "$is_bundle" = true ]; then
 		req "$url" "${output}.apkm" || return 1
