@@ -1,5 +1,6 @@
 Music (arm64-v8a): 9.15.51  
 Music (arm-v7a): 9.15.51  
+Music (x86_64): 9.15.51  
 YouTube: 21.30.216  
 
 Install [Morphe MicroG-RE](https://github.com/MorpheApp/MicroG-RE/releases/latest) for non-root YouTube, YT Music and Reddit APKs  
