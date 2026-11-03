@@ -54,7 +54,7 @@ direct-dlurl = "https://github.com/user/repo/releases/download/v1/app.apk" # dir
 archive-dlurl = "https://archive.org/download/jhc-apks/apks/com.example.app"
 module-prop-name = "some-app-morphe"                       # magisk module prop name.
 dpi = "360-480dpi"                                         # used to select apk variant from apkmirror. default: nodpi
-arch = "arm64-v8a"                                         # 'arm64-v8a', 'arm-v7a', 'all', 'both'. 'both' downloads both arm64-v8a and arm-v7a. default: all
+arch = "arm64-v8a"                                         # 'arm64-v8a', 'arm-v7a', 'x86_64', 'x86', 'all', 'both', or a space-separated list like "arm64-v8a x86_64". 'both' = "arm64-v8a arm-v7a". default: all
 ```
 
 ## Using community patches
